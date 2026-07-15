@@ -1,0 +1,54 @@
+:root {
+  font-family: Arial, sans-serif;
+  color: #f5f5f5;
+  background: #111827;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+.app-shell {
+  width: min(900px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+h1 {
+  margin-top: 0;
+}
+
+table {
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+td {
+  width: 90px;
+  height: 90px;
+  border: 2px solid #6b7280;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.square {
+  width: 90px;
+  height: 90px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.number {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.marker {
+  margin-top: 0.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
