@@ -76,6 +76,28 @@ export class Board {
     return this.winningLines().length > 0;
   }
 
+  nextRound(): void {
+    this.round += 1;
+  }
+
+  phaseLabel(): string {
+    if (this.round <= 2) {
+      return "Phase 1";
+    }
+
+    if (this.round <= 4) {
+      return "Phase 2";
+    }
+
+    return "Burn";
+  }
+
+  reset(): void {
+    this.occupied.clear();
+    this.currentSelection.clear();
+    this.round = 1;
+  }
+
   // ---------------------------------------------------------------------------
   // Private Helpers
   // ---------------------------------------------------------------------------

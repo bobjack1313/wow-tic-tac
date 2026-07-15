@@ -63,21 +63,30 @@ export function isLegalBossOffer(
     }
   }
 
-  if (!isConnectedOffer(offer)) {
-    return false;
-  }
-
+  // The opening offer must connect to itself because no territory exists yet.
   if (occupied.size === 0) {
-    return true;
+    return isConnectedOffer(offer);
   }
 
-  for (const square of offer) {
-    for (const owned of occupied) {
-      if (areAdjacent(square, owned)) {
-        return true;
+  const allowed = new Set([...occupied, ...offer]);
+  const visited = new Set<number>();
+  const stack = [...occupied];
+
+  while (stack.length > 0) {
+    const square = stack.pop()!;
+
+    if (visited.has(square)) {
+      continue;
+    }
+
+    visited.add(square);
+
+    for (const neighbor of KING_NEIGHBORS[square]) {
+      if (allowed.has(neighbor) && !visited.has(neighbor)) {
+        stack.push(neighbor);
       }
     }
   }
 
-  return false;
+  return [...offer].every((square) => visited.has(square));
 }

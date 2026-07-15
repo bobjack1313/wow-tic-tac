@@ -6,15 +6,27 @@
  */
 
 import { Board } from "./board";
-export type GameMode = "boss-selection" | "raid-removal";
+import { isLegalBossOffer } from "./rules";
+import {
+  chooseDangerousBossOffer,
+  chooseRandomBossOffer,
+} from "./boss";
+
+export type GameMode =
+  | "boss-selection"
+  | "raid-removal"
+  | "game-over";
 
 export class Game {
   readonly board = new Board();
   readonly raidRemovals = new Set<number>();
 
   mode: GameMode = "boss-selection";
+  message = "";
 
   toggleSelection(square: number): void {
+    this.message = "";
+
     if (this.mode !== "boss-selection") {
       return;
     }
@@ -30,7 +42,28 @@ export class Game {
     }
   }
 
+  confirmBossSelection(): void {
+    this.message = "";
+
+    if (this.board.currentSelection.size !== 3) {
+      throw new Error("Select exactly 3 boss squares.");
+    }
+
+    if (
+      !isLegalBossOffer(
+        this.board.occupied,
+        this.board.currentSelection,
+      )
+    ) {
+      throw new Error("That boss selection is not legal.");
+    }
+
+    this.mode = "raid-removal";
+  }
+
   toggleRaidRemoval(square: number): void {
+    this.message = "";
+
     if (this.mode !== "raid-removal") {
       return;
     }
@@ -46,15 +79,9 @@ export class Game {
     }
   }
 
-  confirmBossSelection(): void {
-    if (this.board.currentSelection.size !== 3) {
-      throw new Error("Select exactly 3 boss squares.");
-    }
-
-    this.mode = "raid-removal";
-  }
-
   confirmRaidRemoval(): void {
+    this.message = "";
+
     if (this.mode !== "raid-removal") {
       throw new Error("The game is not in raid-removal mode.");
     }
@@ -72,9 +99,61 @@ export class Game {
     }
 
     this.board.addOccupied(keptSquares[0]);
+
+
+    console.log("Kept square:", keptSquares[0]);
+    console.log("Occupied:", [...this.board.occupied].sort((a, b) => a - b));
+    console.log("Winning lines:", this.board.winningLines());
+    console.log("Has win:", this.board.hasWin());
+
+    if (this.board.hasWin()) {
+      this.board.clearSelection();
+      this.raidRemovals.clear();
+      this.mode = "game-over";
+      return;
+    }
     this.board.clearSelection();
     this.raidRemovals.clear();
-    this.board.round += 1;
+    this.board.nextRound();
     this.mode = "boss-selection";
+  }
+
+  reset(): void {
+    this.board.reset();
+    this.raidRemovals.clear();
+    this.mode = "boss-selection";
+    this.message = "";
+  }
+
+  chooseRandomBossOffer(): void {
+    if (this.mode !== "boss-selection") {
+      return;
+    }
+
+    this.message = "";
+
+    const offer = chooseRandomBossOffer(this.board.occupied);
+
+    this.board.currentSelection.clear();
+
+    for (const square of offer) {
+      this.board.currentSelection.add(square);
+    }
+  }
+
+  chooseDangerousBossOffer(): void {
+    if (this.mode !== "boss-selection") {
+      return;
+    }
+
+    this.message = "";
+
+    const offer = chooseDangerousBossOffer(this.board.occupied);
+
+    this.board.currentSelection.clear();
+
+    for (const square of offer) {
+      this.board.currentSelection.add(square);
+    }
   }
 }
