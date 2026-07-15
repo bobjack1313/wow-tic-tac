@@ -14,11 +14,24 @@ function render(): void {
   app.innerHTML = `
     <main class="app-shell">
       <h1>WoW Tic Tac</h1>
-      ${renderBoard(game.board)}
 
-      <button id="confirm-selection" type="button">
-        Confirm Boss Selection
-      </button>
+      <p>Mode: ${game.mode}</p>
+
+      ${renderBoard(game.board, game.raidRemovals)}
+
+      <div>
+        <button id="confirm-selection" type="button">
+          Confirm Boss Selection
+        </button>
+      </div>
+
+      ${game.mode === "raid-removal"
+        ? `
+            <button id="confirm-removals" type="button">
+              Confirm Raid Removal
+            </button>
+          `
+        : ""}
     </main>
   `;
 
@@ -26,8 +39,8 @@ function render(): void {
     .querySelector<HTMLButtonElement>("#confirm-selection")
     ?.addEventListener("click", () => {
       try {
-        const selection = game.confirmBossSelection();
-        console.log("Confirmed boss selection:", selection);
+        game.confirmBossSelection();
+        render();
       } catch (error) {
         console.error(error);
       }
@@ -35,12 +48,29 @@ function render(): void {
 
   document.querySelectorAll<HTMLElement>(".square").forEach((element) => {
     element.addEventListener("click", () => {
-      const square = Number(element.dataset.square);
 
-      game.toggleSelection(square);
+      const square = Number(element.dataset.square);
+      if (game.mode === "boss-selection") {
+        game.toggleSelection(square);
+      } else {
+        game.toggleRaidRemoval(square);
+      }
+
       render();
     });
   });
+
+  document
+    .querySelector<HTMLButtonElement>("#confirm-removals")
+    ?.addEventListener("click", () => {
+      try {
+        game.confirmRaidRemoval();
+        render();
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
 }
 
 render();

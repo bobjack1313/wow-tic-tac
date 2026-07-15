@@ -15,8 +15,13 @@ const GRID = [
   [1, 2, 3],
 ];
 
-export function renderBoard(board: Board): string {
+export function renderBoard(
+  board: Board,
+  raidRemovals: ReadonlySet<number>,
+): string {
+
   const markerFor = (square: number): string => {
+    if (raidRemovals.has(square)) return "X";
     if (board.currentSelection.has(square)) return "*";
     if (board.occupied.has(square)) return "O";
     return "_";
