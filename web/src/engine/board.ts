@@ -82,11 +82,11 @@ export class Board {
 
   phaseLabel(): string {
     if (this.round <= 2) {
-      return "Phase 1";
+      return "1";
     }
 
     if (this.round <= 4) {
-      return "Phase 2";
+      return "2";
     }
 
     return "Burn";

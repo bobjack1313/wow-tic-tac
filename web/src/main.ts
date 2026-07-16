@@ -2,27 +2,11 @@ import "./style.css";
 import { Game } from "./engine/game";
 import { renderBoard } from "./ui/boardView";
 import { renderControlPanel } from "./ui/controlPanel";
-// import { isLegalBossOffer } from "./engine/rules";
+import { renderStatusPanel } from "./ui/statusPanel";
 
 const game = new Game();
 
 const app = document.querySelector<HTMLDivElement>("#app");
-
-// console.assert(
-//   isLegalBossOffer(
-//     new Set([8, 9, 5, 3]),
-//     new Set([7, 6, 2]),
-//   ),
-//   "Expected 7,6,2 to be legal through occupied territory.",
-// );
-
-// console.assert(
-//   !isLegalBossOffer(
-//     new Set([1]),
-//     new Set([7, 9, 3]),
-//   ),
-//   "Expected 7,9,3 to be illegal from occupied square 1.",
-// );
 
 if (!app) {
   throw new Error("App container was not found.");
@@ -32,11 +16,6 @@ function render(): void {
   app.innerHTML = `
     <main class="app-shell">
       <h1>WoW Tic Tac</h1>
-      <p>
-        Round ${game.board.round} *** ${game.board.phaseLabel()}
-      </p>
-
-      <p>Mode: ${game.mode}</p>
 
       ${
         game.mode === "game-over"
@@ -53,8 +32,8 @@ function render(): void {
       }
       ${game.message ? `<p class="message">${game.message}</p>` : ""}
 
+      ${renderStatusPanel(game)}
       ${renderBoard(game.board, game.raidRemovals)}
-
       ${renderControlPanel(game)}
     </main>
   `;

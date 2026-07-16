@@ -15,6 +15,13 @@ const GRID = [
   [1, 2, 3],
 ];
 
+const stateFor = (square: number): string => {
+  if (raidRemovals.has(square)) return "removed";
+  if (board.currentSelection.has(square)) return "selected";
+  if (board.occupied.has(square)) return "occupied";
+  return "available";
+};
+
 export function renderBoard(
   board: Board,
   raidRemovals: ReadonlySet<number>,
@@ -34,11 +41,11 @@ export function renderBoard(
           .map(
             (square) => `
               <td
-                class="square"
+                class="square ${stateFor(square)}"
                 data-square="${square}"
               >
-                <div class="number">${square}</div>
-                <div class="marker">${markerFor(square)}</div>
+                <span class="square-number">${square}</span>
+                <span class="square-marker">${markerFor(square)}</span>
               </td>
             `,
           )

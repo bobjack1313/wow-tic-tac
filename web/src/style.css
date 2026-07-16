@@ -52,3 +52,54 @@ td {
   font-size: 2rem;
   font-weight: bold;
 }
+
+.square {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform 120ms ease,
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.square:hover {
+  transform: translateY(-2px);
+}
+
+.square-number {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.5rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.square-marker {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.square.available {
+  background: #1f2937;
+}
+
+.square.selected {
+  background: #854d0e;
+  border-color: #facc15;
+}
+
+.square.removed {
+  background: #1e3a8a;
+  border-color: #60a5fa;
+}
+
+.square.occupied {
+  background: #7f1d1d;
+  border-color: #f87171;
+}
