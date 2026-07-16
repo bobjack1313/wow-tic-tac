@@ -9,6 +9,9 @@ import { Game } from "../engine/game";
 export function renderControlPanel(game: Game): string {
   return `
     <div class="control-panel">
+      <div class="control-panel-header">
+        <h2>Controls</h2>
+      </div>
       <button id="new-game" type="button">
         New Game
       </button>

@@ -3,6 +3,7 @@ import { Game } from "./engine/game";
 import { renderBoard } from "./ui/boardView";
 import { renderControlPanel } from "./ui/controlPanel";
 import { renderStatusPanel } from "./ui/statusPanel";
+import { renderEncounterPanel } from "./ui/encounterPanel";
 
 const game = new Game();
 
@@ -32,6 +33,7 @@ function render(): void {
       }
       ${game.message ? `<p class="message">${game.message}</p>` : ""}
 
+      ${renderEncounterPanel(game)}
       ${renderStatusPanel(game)}
       ${renderBoard(game.board, game.raidRemovals)}
       ${renderControlPanel(game)}
